@@ -1,88 +1,93 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { roundToHundredth } from '../constants';
 import { Patient } from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PatientService {
-  constructor() {}
+  public sex: 'male' | 'female';
+  public age: number;
 
-  private _patient: BehaviorSubject<Patient> = new BehaviorSubject<Patient>(
-    new Patient({
-      gender: 'male',
-      height: 72,
-      weight: 180,
-      unit: 'standard',
-      age: 25,
-      pal: 1.5,
-    })
-  );
+  private _heightIN: number;
+  private _heightCM: number;
+  private _weightKG: number;
+  private _weightLB: number;
+  public pal: number;
 
-  get value(): Patient {
-    return this._patient.value;
+  constructor() {
+    this.sex = 'male';
+    this.age = 25;
+    this._heightCM = 182.8;
+    this._heightIN = 72;
+    this._weightKG = 81.6;
+    this._weightLB = 180;
+    this.pal = 1.2;
   }
 
-  get patient(): Observable<Patient> {
-    return this._patient.asObservable();
+  get heightIN() {
+    return this._heightIN;
   }
 
-  switchUnits() {
-    const oldPatient = this._patient.value;
-    this._patient.next(new Patient(oldPatient, true));
+  set heightIN(ins: number) {
+    this._heightIN = ins;
+    this._heightCM = roundToHundredth(ins * 2.54);
   }
 
-  set gender(g: 'male' | 'female') {
-    const oldPatient = this._patient.value;
-    oldPatient.gender = g;
-    this._patient.next(new Patient(oldPatient));
+  get heightCM() {
+    return this._heightCM;
   }
 
-  set age(a: number) {
-    const oldPatient = this._patient.value;
-    oldPatient.age = a;
-    this._patient.next(new Patient(oldPatient));
+  set heightCM(cm: number) {
+    this._heightCM = cm;
+    this._heightIN = roundToHundredth(cm / 2.54);
   }
 
-  set weight(w: number) {
-    const oldPatient = this._patient.value;
-    oldPatient.weight = w;
-    this._patient.next(new Patient(oldPatient));
+  get weightKG() {
+    return this._weightKG;
   }
 
-  set height(h: number) {
-    const oldPatient = this._patient.value;
-    oldPatient.height = h;
-    this._patient.next(new Patient(oldPatient));
+  set weightKG(kg: number) {
+    this._weightKG = kg;
+    this._weightLB = roundToHundredth(kg * 2.2);
   }
 
-  set pal(p: number) {
-    const oldPatient = this._patient.value;
-    oldPatient.pal = p;
-    this._patient.next(new Patient(oldPatient));
+  get weightLB() {
+    return this._weightLB;
+  }
+
+  set weightLB(lbs: any) {
+    this._weightLB = lbs;
+    this._weightKG = roundToHundredth(lbs / 2.2);
   }
 
   get bmi(): number {
-    let patient = this._patient.value;
-    if (patient.unit === 'standard') {
-      patient = new Patient(patient, true);
-    }
     // convert height to meters
-    const heightM = patient.height / 100;
-    return patient.weight / (heightM * heightM);
+    const heightM = this._heightCM / 100;
+    return roundToHundredth(this._weightKG / (heightM * heightM));
   }
 
   get mifflin(): number {
-    let patient = this._patient.value;
-    if (patient.unit === 'standard') {
-      patient = new Patient(patient, true);
-    }
-    if (patient.gender === 'male') {
-      return 10 * patient.weight + 6.25 * patient.height - 5 * patient.age + 5;
+    let mifflin = 0;
+    if (this.sex === 'male') {
+      mifflin = 10 * this._weightKG + 6.25 * this._heightCM - 5 * this.age + 5;
     } else {
-      return (
-        10 * patient.weight + 6.25 * patient.height - 5 * patient.age - 161
-      );
+      mifflin =
+        10 * this._weightKG + 6.25 * this._heightCM - 5 * this.age - 161;
     }
+    return roundToHundredth(mifflin);
+  }
+
+  getPatientObject(): Patient {
+    return new Patient({
+      age: this.age,
+      sex: this.sex,
+      heightCM: this.heightCM,
+      heightIN: this.heightIN,
+      weightKG: this.weightKG,
+      weightLB: this.weightLB,
+      pal: this.pal,
+    });
   }
 }

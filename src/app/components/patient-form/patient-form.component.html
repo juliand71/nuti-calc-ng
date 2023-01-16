@@ -1,19 +1,10 @@
 <div fxLayout="column">
   <div fxLayout="row">
     <mat-button-toggle-group
-      name="unit"
-      aria-label="Unit"
-      [formControl]="unitControl"
-    >
-      <mat-button-toggle value="standard">Standard</mat-button-toggle>
-      <mat-button-toggle value="metric">Metric</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-  <div fxLayout="row">
-    <mat-button-toggle-group
       name="gender"
       aria-label="Gender"
       [formControl]="genderControl"
+      class="unit-field"
     >
       <mat-button-toggle value="male">
         Male<mat-icon fontIcon="male"></mat-icon>
@@ -22,30 +13,31 @@
         Female<mat-icon fontIcon="female"></mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>
-  </div>
-
-  <div fxLayout="row">
-    <mat-form-field>
+    <mat-form-field class="unit-field">
       <mat-label>Age</mat-label>
       <input matInput type="number" [formControl]="ageControl" />
     </mat-form-field>
   </div>
   <div fxLayout="row">
-    <mat-form-field>
-      <mat-label>Weight ({{ weightUnit }})</mat-label>
-      <input matInput type="number" [formControl]="weightControl" />
+  </div>
+  <div fxLayout="row">
+    <mat-form-field class="unit-field">
+      <mat-label>Weight (LBS)</mat-label>
+      <input matInput type="number" [formControl]="weightControlLB" />
+    </mat-form-field>
+    <mat-form-field class="unit-field">
+      <mat-label>Weight (KG)</mat-label>
+      <input matInput type="number" [formControl]="weightControlKG" />
     </mat-form-field>
   </div>
   <div fxLayout="row">
-    <mat-form-field>
-      <mat-label>Height ({{ heightUnit1 }})</mat-label>
-      <input matInput type="number" [formControl]="heightControl1" />
+    <mat-form-field class="unit-field">
+      <mat-label>Height (IN)</mat-label>
+      <input matInput type="number" [formControl]="heightControlIN" />
     </mat-form-field>
-  </div>
-  <div fxLayout="row">
-    <mat-form-field>
-      <mat-label>Height ({{ heightUnit2 }})</mat-label>
-      <input matInput type="number" [formControl]="heightControl2" />
+    <mat-form-field class="unit-field">
+      <mat-label>Height (CM)</mat-label>
+      <input matInput type="number" [formControl]="heightControlCM" />
     </mat-form-field>
   </div>
   <div fxLayout="row">

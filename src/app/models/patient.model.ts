@@ -1,43 +1,24 @@
-export class Patient {
-  gender: 'male'| 'female';
-  height: number;
-  weight: number;
+export interface IPatient {
+  sex: 'male' | 'female';
   age: number;
+
+  heightIN: number;
+  heightCM: number;
+  weightKG: number;
+  weightLB: number;
   pal: number;
-  unit: 'metric' | 'standard';
+}
 
-  constructor({
-    gender,
-    height,
-    weight,
-    age,
-    pal,
-    unit,
-  }: {
-    gender: 'male'| 'female';
-    height: number;
-    weight: number;
-    age: number;
-    pal: number;
-    unit: 'metric' | 'standard';
-  }, switchUnits = false) {
-    this.gender = gender;
-    this.height = height;
-    this.weight = weight;
-    this.age = age;
-    this.pal = pal;
-    this.unit = unit;
+export class Patient implements IPatient {
+  sex: 'male' | 'female' = 'male';
+  age: number = 25;
+  heightIN: number = 182.8;
+  heightCM: number = 72;
+  weightKG: number = 81.6;
+  weightLB: number = 180;
+  pal: number = 1.2;
 
-    if (switchUnits) {
-      if (this.unit === 'standard') {
-        this.height = Math.round(this.height * 2.54);
-        this.weight = Math.round(this.weight / 2.205);
-        this.unit = 'metric';
-      } else {
-        this.height = Math.round(this.height / 2.54);
-        this.weight = Math.round(this.weight * 2.205);
-        this.unit = 'standard';
-      }
-    }
+  constructor(data: Partial<IPatient>) {
+    Object.assign(this, data);
   }
 }

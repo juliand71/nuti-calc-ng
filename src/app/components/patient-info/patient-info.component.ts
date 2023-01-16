@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Patient } from 'src/app/models/patient.model';
+import { roundToHundredth } from 'src/app/constants';
 import { PatientService } from 'src/app/services/patient.service';
 
 @Component({
@@ -8,13 +8,24 @@ import { PatientService } from 'src/app/services/patient.service';
   styleUrls: ['./patient-info.component.css'],
 })
 export class PatientInfoComponent implements OnInit {
-  patient: Patient;
-  constructor(protected patientService: PatientService) {
-    this.patient = this.patientService.value;
+  constructor(protected patientService: PatientService) {}
+  ngOnInit(): void {}
+
+  getPatient() {
+    return this.patientService.getPatientObject();
   }
-  ngOnInit(): void {
-    this.patientService.patient.subscribe((pt) => {
-      this.patient = pt;
-    });
+
+  getBmi() {
+    return this.patientService.bmi;
+  }
+
+  getMifflin() {
+    return this.patientService.mifflin;
+  }
+
+  getMifflinXPal() {
+    return roundToHundredth(
+      this.patientService.mifflin * this.patientService.pal
+    );
   }
 }
